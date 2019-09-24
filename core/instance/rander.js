@@ -33,6 +33,7 @@ export function prepareRender(vm, vnode) {
     if (vnode.nodeType == 3) { //是个文本节点
         analysisTemplate(vnode)
     }
+    analtsisAttr(vm,vnode)
     if (vnode.nodeType == 1) { //是个标签
         for (let i = 0; i < vnode.children.length; i++) {
             prepareRender(vm, vnode.children[i])
@@ -54,6 +55,16 @@ function renderNode(vm, vnode,prop = '') { //递归渲染
             }
             vnode.elm.nodeValue = result
         }
+    }else if(vnode.nodeType == 1 && vnode.tag == 'INPUT'){ 
+        let templates = vnode2Template.get(vnode)
+        if(templates){
+            for(let i = 0;i < templates.length;i++){
+                let templateValue = getTemplateValue([vm._data,vm], prop ? prop:templates[i])
+                if(templateValue){
+                    vnode.elm.value = templateValue
+                }
+            }
+        }
     } else {
         for (let i = 0; i < vnode.children.length; i++) {
             renderNode(vm, vnode.children[i])
@@ -66,7 +77,7 @@ function analysisTemplate(vnode) {
     let templateList = vnode.text.match(/{{[a-zA-Z0-9_.\[\]]+}}/g)
     for (let i = 0; templateList && i < templateList.length; i++) {
         setTemplate2Vnode(templateList[i], vnode)
-        setTemolate2Vnode(templateList[i], vnode)
+        setVnode2Template(templateList[i], vnode)
     }
 }
 
@@ -80,7 +91,7 @@ function setTemplate2Vnode(template, vnode) {
     }
 }
 
-function setTemolate2Vnode(template, vnode) {
+function setVnode2Template(template, vnode) {
     let templateSet = vnode2Template.get(vnode)
     if (templateSet) {
         templateSet.push(getTemplateName(template))
@@ -107,4 +118,15 @@ function getTemplateValue(objs, templateName) {
         }
     }
     return null
+}
+function analtsisAttr(vm,vnode){
+    if(vnode.nodeType != 1){
+        return 
+    }
+    let attrNames = vnode.elm.getAttributeNames()
+    if(attrNames.indexOf('v-model') > -1){
+        console.log(vnode.elm.getAttribute('v-model'),vnode)
+        setTemplate2Vnode(vnode.elm.getAttribute('v-model'),vnode)
+        setVnode2Template(vnode.elm.getAttribute('v-model'),vnode)
+    }
 }

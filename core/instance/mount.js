@@ -4,8 +4,8 @@ import { vmodel } from "./directives/vmodel.js"
 function mount(vm,elm){
     vm._vnode = constructVNode(vm,elm,null) //进行挂载
     prepareRender(vm,vm._vnode)
-    // console.log(getTemplate2Vnode())
-    // console.log(getVnode2Template())
+    console.log(getTemplate2Vnode())
+    console.log(getVnode2Template())
 }
 
 export function mountMixin(Yue){
