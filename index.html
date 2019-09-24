@@ -1,0 +1,50 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>MVVM</title>
+    <style>
+        *{margin:0;padding:0;list-style:none;text-decoration:none;}
+    </style>
+</head>
+<body>
+    <div id="app">
+        <p>你好{{content}},{{content}}</p>
+        <span>{{description}}</span>
+        <span>{{obj.name}}</span>
+        <span>{{arrList[0].a}}</span>
+        <span>{{arrList[3]}}</span>
+        <input type="text" v-model='model'>
+        {{model}}
+    </div>
+    <script type='module'>
+        import Yue from './core/index.js'
+       window.vm = new Yue({
+            el : 'app',
+            data : {
+                model :"123",
+                content:'yyg',
+                description : '123',
+                obj : {
+                    name : 'objname',
+                    age : 21,
+                    inObj:{
+                        name : 'inyyg'
+                    }
+                },
+                arrList:[
+                    {
+                        a: 'a',
+                        b:'b'
+                    },
+                    {
+                        c:'c',
+                        d:'d'
+                    },
+                    10,11
+                ]
+            }
+        })
+    </script>
+</body>
+</html>
